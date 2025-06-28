@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: pern-todo-db
+    environment:
+      POSTGRES_DB: perntodo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/database.sql:/docker-entrypoint-initdb.d/database.sql
+    networks:
+      - pern-network
+
+  # Express.js Server
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: pern-todo-server
+    environment:
+      USER: postgres
+      PASSWORD: password
+      HOST: db
+      PORT: 5432
+      DATABASE: perntodo
+      SERVER_PORT: 8000
+      NODE_ENV: production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - pern-network
+    restart: unless-stopped
+
+  # React Client
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: pern-todo-client
+    environment:
+      - REACT_APP_API_URL=http://server:8000
+    ports:
+      - "3001:3000"
+    depends_on:
+      - server
+    networks:
+      - pern-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  pern-network:
+    driver: bridge 

@@ -121,5 +121,5 @@ app.delete('/todos/:id', async (req, res) => {
 
 
 // PORT 
-const port = process.env.PORT || 8000
+const port = process.env.SERVER_PORT || 8000
 app.listen(port, () => { console.log(`Your server is listening at ${port}`) })

@@ -1,5 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+
 function EditTodo({ todo }) {
 
     const [description, setDescription] = useState(todo.description);
@@ -9,7 +11,7 @@ function EditTodo({ todo }) {
         e.preventDefault();
         try {
             const body = { description };
-            const response = await fetch(`http://localhost:8000/todos/${todo.todo_id}`, {
+            const response = await fetch(`${API_URL}/todos/${todo.todo_id}`, {
                 method: "PUT",
                 headers: { "Content-type": "application/json" },
                 body: JSON.stringify(body)
