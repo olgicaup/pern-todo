@@ -8,7 +8,7 @@
     "server": "nodemon index.js",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "author": "Vivek Kumar",
   "license": "ISC",

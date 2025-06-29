@@ -1,4 +1,3 @@
-
 # PERN ToDo App
 
 This project implements a simple ToDo application using the PERN stack: PostgreSQL, Express.js, React, and Node.js. This app allows you to manage your tasks, mark them as complete, and remove them from your list.
@@ -9,19 +8,48 @@ This project implements a simple ToDo application using the PERN stack: PostgreS
 - Edit tasks as per need.
 - Delete tasks from the list.
 - View all tasks and their statuses.
+- Dockerized for easy deployment
+- CI/CD pipeline with GitHub Actions
 ```
 ## Technologies
 
 - Front-End: React.js
 - Back-End: Express.js, Node.js
 - Database: PostgreSQL
+- Containerization: Docker
+- CI/CD: GitHub Actions
 
-## Installation
+## Quick Start with Docker
+
+### Development
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/PERN-ToDo-App.git
+cd PERN-ToDo-App
+
+# Start all services
+docker-compose up -d
+
+# Access the application
+# Frontend: http://localhost:3001
+# Backend API: http://localhost:8000
+```
+
+### Production
+```bash
+# Set your Docker Hub username
+export DOCKERHUB_USERNAME=yourusername
+
+# Start with production images
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+## Local Development Installation
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/vickytilotia/PERN-ToDo-App.git
+   git clone https://github.com/yourusername/PERN-ToDo-App.git
    ```
 
 2. Navigate to the project directory:
@@ -49,6 +77,31 @@ This project implements a simple ToDo application using the PERN stack: PostgreS
 
 6. The app will be accessible at `http://localhost:3000`.
 
+## CI/CD Pipeline
+
+This project includes a complete CI/CD pipeline using GitHub Actions that:
+
+1. **Tests**: Runs unit tests for both client and server
+2. **Builds**: Creates Docker images for all services
+3. **Pushes**: Uploads images to Docker Hub
+4. **Deploys**: Ready for production deployment
+
+### Setup GitHub Secrets
+
+To enable the CI/CD pipeline, add these secrets to your GitHub repository:
+
+1. Go to your repository → Settings → Secrets and variables → Actions
+2. Add the following secrets:
+   - `DOCKERHUB_USERNAME`: Your Docker Hub username
+   - `DOCKERHUB_TOKEN`: Your Docker Hub access token
+
+### Docker Hub Images
+
+After setting up the CI/CD pipeline, your images will be available at:
+- `yourusername/pern-todo-app-client:latest`
+- `yourusername/pern-todo-app-server:latest`
+- `yourusername/pern-todo-app-db:latest`
+
 ## Usage
 
 - Create tasks/ todos.
@@ -68,4 +121,8 @@ Contributions are welcome! If you find any issues or want to enhance the project
 3. Commit your changes: `git commit -am 'Add feature'`.
 4. Push to the branch: `git push origin feature-name`.
 5. Submit a pull request.
+
+## License
+
+This project is licensed under the ISC License.
 

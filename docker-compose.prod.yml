@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: ${DOCKERHUB_USERNAME:-yourusername}/pern-todo-app-db:latest
+    container_name: pern-todo-db-prod
+    environment:
+      POSTGRES_DB: perntodo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pern-network
+    restart: unless-stopped
+
+  # Express.js Server
+  server:
+    image: ${DOCKERHUB_USERNAME:-yourusername}/pern-todo-app-server:latest
+    container_name: pern-todo-server-prod
+    environment:
+      USER: postgres
+      PASSWORD: ${DB_PASSWORD:-password}
+      HOST: db
+      PORT: 5432
+      DATABASE: perntodo
+      SERVER_PORT: 8000
+      NODE_ENV: production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - pern-network
+    restart: unless-stopped
+
+  # React Client
+  client:
+    image: ${DOCKERHUB_USERNAME:-yourusername}/pern-todo-app-client:latest
+    container_name: pern-todo-client-prod
+    environment:
+      - REACT_APP_API_URL=http://server:8000
+    ports:
+      - "3001:3000"
+    depends_on:
+      - server
+    networks:
+      - pern-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  pern-network:
+    driver: bridge 

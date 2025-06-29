@@ -1,0 +1,40 @@
+name: Deploy to Production
+
+on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types:
+      - completed
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+      - name: Deploy to production server
+        run: |
+          echo "Deploying to production..."
+          echo "Add your deployment commands here"
+          
+          # Example deployment commands:
+          # - SSH to your server
+          # - Pull latest images
+          # - Restart services
+          # - Health checks
+          
+          # ssh user@your-server.com << 'EOF'
+          #   cd /path/to/your/app
+          #   docker-compose -f docker-compose.prod.yml pull
+          #   docker-compose -f docker-compose.prod.yml up -d
+          #   docker system prune -f
+          # EOF
+          
+          echo "Deployment completed successfully!"
+
+      - name: Health check
+        run: |
+          echo "Running health checks..."
+          # Add health check commands here
+          # curl -f http://your-domain.com/health || exit 1 
