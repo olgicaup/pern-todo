@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # PostgreSQL Database
   db:
-    image: ${DOCKERHUB_USERNAME:-yourusername}/pern-todo-app-db:latest
+    image: ${DOCKERHUB_USERNAME:-olgicaupcheva}/pern-todo-app-db:latest
     container_name: pern-todo-db-prod
     environment:
       POSTGRES_DB: perntodo
@@ -19,7 +19,7 @@ services:
 
   # Express.js Server
   server:
-    image: ${DOCKERHUB_USERNAME:-yourusername}/pern-todo-app-server:latest
+    image: ${DOCKERHUB_USERNAME:-olgicaupcheva}/pern-todo-app-server:latest
     container_name: pern-todo-server-prod
     environment:
       USER: postgres
@@ -39,7 +39,7 @@ services:
 
   # React Client
   client:
-    image: ${DOCKERHUB_USERNAME:-yourusername}/pern-todo-app-client:latest
+    image: ${DOCKERHUB_USERNAME:-olgicaupcheva}/pern-todo-app-client:latest
     container_name: pern-todo-client-prod
     environment:
       - REACT_APP_API_URL=http://server:8000
