@@ -86,13 +86,4 @@ jobs:
           push: true
           tags: olgicaupcheva/pern-todo-app-db:latest,${{ env.DATABASE_IMAGE_NAME }}:${{ github.sha }}
 
-  # deploy:
-  #   needs: build-and-push
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    
-  #   steps:
-  #     - name: Deploy to production
-  #       run: |
-  #         echo "Deployment step - Add your deployment logic here"
-  #         echo "For example: deploy to cloud platform, update production environment, etc." 
+ 
