@@ -7,8 +7,9 @@ on:
     branches: [ main, master ]
 
 env:
-  REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.repository }}
+  BACKEND_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/pern-todo-app-server
+  FRONTEND_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/pern-todo-app-client
+  DATABASE_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/pern-todo-app-db
 
 jobs:
   test:
@@ -60,17 +61,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=sha
 
       - name: Build and push server image
         uses: docker/build-push-action@v5
@@ -78,8 +68,7 @@ jobs:
           context: .
           file: ./Dockerfile.server
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-server:${{ steps.meta.outputs.version }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.BACKEND_IMAGE_NAME }}:latest,${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }}
 
       - name: Build and push client image
         uses: docker/build-push-action@v5
@@ -87,8 +76,7 @@ jobs:
           context: .
           file: ./Dockerfile.client
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-client:${{ steps.meta.outputs.version }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.FRONTEND_IMAGE_NAME }}:latest,${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }}
 
       - name: Build and push database image
         uses: docker/build-push-action@v5
@@ -99,13 +87,13 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-db:${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+  # deploy:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     
-    steps:
-      - name: Deploy to production
-        run: |
-          echo "Deployment step - Add your deployment logic here"
-          echo "For example: deploy to cloud platform, update production environment, etc." 
+  #   steps:
+  #     - name: Deploy to production
+  #       run: |
+  #         echo "Deployment step - Add your deployment logic here"
+  #         echo "For example: deploy to cloud platform, update production environment, etc." 
