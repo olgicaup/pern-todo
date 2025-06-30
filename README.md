@@ -9,7 +9,7 @@ This project implements a simple ToDo application using the PERN stack: PostgreS
 - Delete tasks from the list.
 - View all tasks and their statuses.
 - Dockerized for easy deployment
-- CI/CD pipeline with GitHub Actions
+- CI/CD pipeline with GitHub Actions or Jenkins
 ```
 ## Technologies
 
@@ -17,7 +17,7 @@ This project implements a simple ToDo application using the PERN stack: PostgreS
 - Back-End: Express.js, Node.js
 - Database: PostgreSQL
 - Containerization: Docker
-- CI/CD: GitHub Actions
+- CI/CD: GitHub Actions or Jenkins
 
 ## Quick Start with Docker
 
@@ -79,14 +79,18 @@ docker-compose -f docker-compose.prod.yml up -d
 
 ## CI/CD Pipeline
 
-This project includes a complete CI/CD pipeline using GitHub Actions that:
+This project supports both GitHub Actions and Jenkins for CI/CD.
+
+### Option 1: GitHub Actions
+
+The project includes a complete CI/CD pipeline using GitHub Actions that:
 
 1. **Tests**: Runs unit tests for both client and server
 2. **Builds**: Creates Docker images for all services
 3. **Pushes**: Uploads images to Docker Hub
 4. **Deploys**: Ready for production deployment
 
-### Setup GitHub Secrets
+#### Setup GitHub Secrets
 
 To enable the CI/CD pipeline, add these secrets to your GitHub repository:
 
@@ -95,9 +99,31 @@ To enable the CI/CD pipeline, add these secrets to your GitHub repository:
    - `DOCKERHUB_USERNAME`: Your Docker Hub username
    - `DOCKERHUB_TOKEN`: Your Docker Hub access token
 
+### Option 2: Jenkins
+
+For Jenkins CI/CD setup, see the detailed guide in `jenkins-setup.md`.
+
+#### Quick Jenkins Setup
+```bash
+# Start Jenkins with Docker
+docker-compose -f docker-compose.jenkins.yml up -d
+
+# Access Jenkins at http://localhost:8080
+# Follow the setup wizard and install required plugins
+# Create a new pipeline job using the Jenkinsfile
+```
+
+#### Required Jenkins Plugins
+- Docker Pipeline
+- Docker plugin
+- Git
+- NodeJS Plugin
+- Pipeline
+- Credentials Binding
+
 ### Docker Hub Images
 
-After setting up the CI/CD pipeline, your images will be available at:
+After setting up either CI/CD pipeline, your images will be available at:
 - `yourusername/pern-todo-app-client:latest`
 - `yourusername/pern-todo-app-server:latest`
 - `yourusername/pern-todo-app-db:latest`
