@@ -7,9 +7,9 @@ on:
     branches: [ main, master ]
 
 env:
-  BACKEND_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/pern-todo-app-server
-  FRONTEND_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/pern-todo-app-client
-  DATABASE_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/pern-todo-app-db
+  BACKEND_IMAGE_NAME: olgicaupcheva/pern-todo-app-server
+  FRONTEND_IMAGE_NAME: olgicaupcheva/pern-todo-app-client
+  DATABASE_IMAGE_NAME: olgicaupcheva/pern-todo-app-db
 
 jobs:
   test:
@@ -68,7 +68,7 @@ jobs:
           context: .
           file: ./Dockerfile.server
           push: true
-          tags: ${{ env.BACKEND_IMAGE_NAME }}:latest,${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }}
+          tags: olgicaupcheva/pern-todo-app-server:latest,${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }}
 
       - name: Build and push client image
         uses: docker/build-push-action@v5
@@ -76,7 +76,7 @@ jobs:
           context: .
           file: ./Dockerfile.client
           push: true
-          tags: ${{ env.FRONTEND_IMAGE_NAME }}:latest,${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }}
+          tags: olgicaupcheva/pern-todo-app-client:latest,${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }}
 
       - name: Build and push database image
         uses: docker/build-push-action@v5
@@ -84,8 +84,7 @@ jobs:
           context: .
           file: ./Dockerfile.db
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-db:${{ steps.meta.outputs.version }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: olgicaupcheva/pern-todo-app-db:latest,${{ env.DATABASE_IMAGE_NAME }}:${{ github.sha }}
 
   # deploy:
   #   needs: build-and-push
