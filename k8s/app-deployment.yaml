@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pern-todo-app
+  namespace: pern-todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pern-todo-app
+  template:
+    metadata:
+      labels:
+        app: pern-todo-app
+    spec:
+      containers:
+      - name: server
+        image: olgicaupcheva/pern-todo-app-server:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: USER
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DB_USER
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: DB_PASSWORD
+        - name: HOST
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DB_HOST
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DB_PORT
+        - name: DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DB_NAME
+        - name: SERVER_PORT
+          value: "8000"
+      - name: client
+        image: olgicaupcheva/pern-todo-app-client:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_API_URL
+          value: "http://pern-todo-app:8000" 

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pern-todo-app
+  namespace: pern-todo
+spec:
+  selector:
+    app: pern-todo-app
+  ports:
+    - name: server
+      port: 8000
+      targetPort: 8000
+    - name: client
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP 
